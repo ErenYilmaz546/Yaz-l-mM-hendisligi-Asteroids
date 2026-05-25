@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1779747383 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\main.c
+	<stdio.h>
+	<stdlib.h>
+	"raylib.h"
+
+1779747883 c:\raylib\include\raylib.h
+	<stdarg.h>
+	<stdbool.h>
+

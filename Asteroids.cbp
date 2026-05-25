@@ -30,7 +30,12 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="../../../../../../raylib/include" />
 		</Compiler>
+		<Linker>
+			<Add option="-lraylib -lopengl32 -lgdi32 -lwinmm" />
+			<Add directory="../../../../../../raylib/lib" />
+		</Linker>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
