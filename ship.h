@@ -4,13 +4,13 @@
 
 
 typedef struct {
-    Vector2 position;     /* Ekranda bulunduğu konum */
-    Vector2 velocity;     /* İlerleme hızı ve yönü */
-    float rotation;       /* Geminin baktığı açı */
-    float invulTimer;     /* Dokunulmazlık sayacı */
-    float respawnTimer;   /* Yeniden doğma sayacı */
-    bool alive;           /* Yaşıyor mu? */
-    bool thrusting;       /* Gaza basıyor mu? */
+    Vector2 position;     // Ekranda bulunduğu konum
+    Vector2 velocity;     // İlerleme hızı ve yönü
+    float rotation;       // Geminin baktığı açı
+    float invulTimer;     // Dokunulmazlık
+    float respawnTimer;   // Yeniden doğma
+    bool alive;           // Yaşmak
+    bool thrusting;       // Gaza basma
 } Player;
 
 void Player_Init(Player *p);

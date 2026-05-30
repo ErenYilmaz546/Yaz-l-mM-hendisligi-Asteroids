@@ -6,7 +6,6 @@
 #define PLAYER_RESPAWN_TIME 3.0f
 #define PLAYER_TURN_SPEED 4.0f
 #define PLAYER_THRUST 0.1f
-#define PLAYER_DRAG 0.99f
 #define PLAYER_MAX_SPEED 8.0f
 
 
@@ -83,15 +82,6 @@ void Player_Update(Player *p) {
         p->velocity.x += dir.x * PLAYER_THRUST;
         p->velocity.y += dir.y * PLAYER_THRUST;
     }
-
-    p->velocity.x *= PLAYER_DRAG;
-    p->velocity.y *= PLAYER_DRAG;
-
-
-    p->position.x += p->velocity.x;
-    p->position.y += p->velocity.y;
-
-
 
 
     p->position.x += p->velocity.x;

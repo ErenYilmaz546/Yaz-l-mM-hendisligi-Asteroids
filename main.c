@@ -21,7 +21,6 @@ int main(void) {
         Game_Draw(&game);
         EndDrawing();
     }
-
     CloseWindow();
     return 0;
 }
