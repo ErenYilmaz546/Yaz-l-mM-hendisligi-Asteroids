@@ -127,7 +127,7 @@ void Game_Update(Game *g) {
     CheckPlayerAsteroidCollisions(g);
     CheckBulletAsteroidCollisions(g);
 
-    if (Asteroids_CountActive(g->asteroids) == 0) {
+    if (Asteroids_CountActive(g->asteroids) == 1) {
         g->wave++;
     }
 }

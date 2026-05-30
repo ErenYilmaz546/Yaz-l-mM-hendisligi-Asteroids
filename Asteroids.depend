@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1780173246 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\main.c
+1780173514 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\main.c
 	"raylib.h"
 	"game.h"
 	<stdlib.h>

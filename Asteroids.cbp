@@ -38,6 +38,14 @@
 			<Add option="-lraylib -lopengl32 -lgdi32 -lwinmm" />
 			<Add directory="../../../../../../raylib/lib" />
 		</Linker>
+		<Unit filename="asteroid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="asteroid.h" />
+		<Unit filename="bullets.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="bullets.h" />
 		<Unit filename="game.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -45,6 +53,10 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="ship.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ship.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
