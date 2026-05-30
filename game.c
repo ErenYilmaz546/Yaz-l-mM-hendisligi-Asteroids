@@ -3,14 +3,14 @@
 #define START_LIVES 3
 #define PLAYER_RADIUS 12.0f
 
-/* İki obje arası çarpışma tespiti için mesafe karesi hesabı */
+
 static float DistanceSq(Vector2 p1, Vector2 p2) {
     float dx = p1.x - p2.x;
     float dy = p1.y - p2.y;
     return dx * dx + dy * dy;
 }
 
-/* Oyun ilk açıldığında değerleri sıfırlar */
+
 void Game_Init(Game *g) {
     g->state    = STATE_MENU;
     g->score    = 0;
@@ -20,9 +20,10 @@ void Game_Init(Game *g) {
 
     Player_Init(&g->player);
     Asteroids_Init(g->asteroids);
+    Bullets_Init(g->bullets);
 }
 
-/* Oynanış başladığında can ve skoru yeniler */
+
 void Game_StartNew(Game *g) {
     g->state = STATE_PLAYING;
     g->score = 0;
@@ -31,20 +32,20 @@ void Game_StartNew(Game *g) {
 
     Player_Init(&g->player);
     Asteroids_Init(g->asteroids);
+    Bullets_Init(g->bullets);
 
-    /* 1. Dalga: 4 büyük asteroit yarat */
     Asteroids_SpawnWave(g->asteroids, 4, g->player.position, 180.0f);
 }
 
-/* Oyuncunun asteroitlere çarpıp çarpmadığını test eder */
+
 static void CheckPlayerAsteroidCollisions(Game *g) {
     if (!g->player.alive) return;
-    if (g->player.invulTimer > 0.0f) return; /* Dokunulmazken çarpışmaz */
+    if (g->player.invulTimer > 0.0f) return;
 
     for (int a = 0; a < MAX_ASTEROIDS; a++) {
         if (!g->asteroids[a].active) continue;
 
-        /* Oyuncunun yarıçapı ile asteroidin yarıçapı kesişiyorsa */
+
         float r = g->asteroids[a].radius + PLAYER_RADIUS;
         if (DistanceSq(g->player.position, g->asteroids[a].position) < r * r) {
             Player_Kill(&g->player);
@@ -58,6 +59,37 @@ static void CheckPlayerAsteroidCollisions(Game *g) {
     }
 }
 
+static void CheckBulletAsteroidCollisions(Game *g) {
+    for (int i = 0; i < MAX_BULLETS; i++) {
+
+        if (!g->bullets[i].active) continue;
+
+        for (int a = 0; a < MAX_ASTEROIDS; a++) {
+
+            if (!g->asteroids[a].active) continue;
+
+
+            float r = g->asteroids[a].radius;
+            if (DistanceSq(g->bullets[i].position, g->asteroids[a].position) < r * r) {
+
+
+                g->bullets[i].active = false;
+
+
+                Asteroids_Break(g->asteroids, a);
+
+
+                g->score += 100;
+                if (g->score > g->hiScore) {
+                    g->hiScore = g->score;
+                }
+
+
+                break;
+            }
+        }
+    }
+}
 
 void Game_Update(Game *g) {
 
@@ -79,25 +111,28 @@ void Game_Update(Game *g) {
         return;
     }
 
-    /* Oynanış sırasında ESC basılırsa menüye dön */
+
     if (IsKeyPressed(KEY_ESCAPE)) {
         g->state = STATE_MENU;
         return;
     }
+    if (g->player.alive && IsKeyPressed(KEY_SPACE)){
+         Bullets_Spawn(g->bullets, g->player.position, g->player.rotation);
+    }
 
-    /* Alt sistemleri güncelle */
+
     Player_Update   (&g->player);
     Asteroids_Update( g->asteroids);
-
+    Bullets_Update( g->bullets);
     CheckPlayerAsteroidCollisions(g);
+    CheckBulletAsteroidCollisions(g);
 
-    /* Tüm asteroitler bitince yeni dalgayı başlat */
     if (Asteroids_CountActive(g->asteroids) == 0) {
         g->wave++;
     }
 }
 
-/* Arayüz yazılarını Skor, Can, Dalga */
+
 static void DrawHud(const Game *g) {
     char buf[64];
     int sw = GetScreenWidth();
@@ -117,13 +152,13 @@ static void DrawHud(const Game *g) {
     DrawText(buf, sw - w - 20, 44, 22, GOLD);
 }
 
-/* Ekranda görünen her şeyin çizim komutları*/
+
 void Game_Draw(const Game *g) {
     ClearBackground(BLACK);
     int sw = GetScreenWidth();
     int sh = GetScreenHeight();
 
-    /* Menü */
+
     if (g->state == STATE_MENU) {
         const char *title = "ASTEROIDS";
         int tw = MeasureText(title, 80);
@@ -136,21 +171,23 @@ void Game_Draw(const Game *g) {
         const char *play = "BASLA: ENTER / SPACE";
         int pw = MeasureText(play, 26);
         DrawText(play, (sw - pw) / 2, 420, 26, YELLOW);
-
-        const char *hint1 = "--Hareket yön tuslari ile yapilabilir--";
-        const char *hint4 = "--Pause: ESC--";
+        const char *hint1 = "--Atesleme space tusu ile yapilir--";
+        const char *hint2 = "--Hareket yön tuslari ile yapilir--";
+        const char *hint3 = "--Pause: ESC--";
         DrawText(hint1, sw/2 - 160, 490, 20, LIGHTGRAY);
-        DrawText(hint4, sw/2 - 160, 550, 20, LIGHTGRAY);
+        DrawText(hint2, sw/2 - 160, 520, 20, LIGHTGRAY);
+        DrawText(hint3, sw/2 - 160, 550, 20, LIGHTGRAY);
         return;
     }
 
-    /* Oyun içi obje çizimleri */
+
     Asteroids_Draw(g->asteroids);
     Player_Draw   (&g->player);
+    Bullets_Draw(g->bullets);
 
     DrawHud(g);
 
-    /* Oyun Sonu ekranı çizimi */
+
     if (g->state == STATE_GAME_OVER) {
 
 

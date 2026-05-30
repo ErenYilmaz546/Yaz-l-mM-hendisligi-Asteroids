@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1780080720 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\main.c
+1780166100 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\main.c
 	"raylib.h"
 	"game.h"
 	<stdlib.h>
@@ -9,27 +9,36 @@
 	<stdarg.h>
 	<stdbool.h>
 
-1780082747 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\game.c
+1780166137 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\game.c
 	"game.h"
 	<stdio.h>
 
-1780082155 c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\game.h
+1780165996 c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\game.h
 	"ship.h"
 	"asteroid.h"
+	"bullets.h"
 
-1780082155 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\asteroid.c
+1780165996 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\asteroid.c
 	"asteroid.h"
 	<math.h>
 	<stdlib.h>
 
-1780082155 c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\asteroid.h
+1780165996 c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\asteroid.h
 	"raylib.h"
 
-1780082373 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\ship.c
+1780163430 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\ship.c
 	"ship.h"
 	<math.h>
 	<stdlib.h>
 
-1780082251 c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\ship.h
+1780165996 c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\ship.h
 	"raylib.h"
+
+1780165996 source:c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\bullets.c
+	"bullets.h"
+	<math.h>
+
+1780165996 c:\users\eyilm\onedrive\masaüstü\oyun projesi\asteroids\bullets.h
+	"raylib.h"
+	<stdbool.h>
 

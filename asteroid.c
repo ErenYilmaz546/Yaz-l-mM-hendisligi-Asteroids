@@ -5,12 +5,12 @@
 #define ASTEROID_MEDIUM_R 20.0f
 #define ASTEROID_SMALL_R 10.0f
 
-// Rastgele ondalıklı sayı üretici
+
 static float RandFloat(float min, float max) {
     return min + ((float)rand() / (float)RAND_MAX) * (max - min);
 }
 
-// Sınırları saran yardımcı fonksiyon
+
 static void WrapPosition(Vector2 *pos) {
     int sw = GetScreenWidth();
     int sh = GetScreenHeight();
@@ -20,14 +20,14 @@ static void WrapPosition(Vector2 *pos) {
     if (pos->y > sh) pos->y -= sh;
 }
 
-// İki nokta arasındaki uzaklığın karesini alır (Çarpışma hesabı için)
+
 static float DistanceSq(Vector2 p1, Vector2 p2) {
     float dx = p1.x - p2.x;
     float dy = p1.y - p2.y;
     return dx * dx + dy * dy;
 }
 
-// Boyut tipini yarıçap sayısına dönüştürür
+
 static float SizeToRadius(AsteroidSize s) {
     switch (s) {
         case AST_LARGE:  return ASTEROID_LARGE_R;
@@ -37,7 +37,7 @@ static float SizeToRadius(AsteroidSize s) {
     return ASTEROID_LARGE_R;
 }
 
-// Dizideki ilk boş (aktif olmayan) yeri bulur
+
 static int FindFreeSlot(Asteroid asteroids[MAX_ASTEROIDS]) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
         if (!asteroids[i].active) return i;
@@ -45,18 +45,17 @@ static int FindFreeSlot(Asteroid asteroids[MAX_ASTEROIDS]) {
     return -1;
 }
 
-// Başlangıçta tüm asteroitleri pasif yapar
+
 void Asteroids_Init(Asteroid asteroids[MAX_ASTEROIDS]) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
         asteroids[i].active = false;
     }
 }
 
-// Yeni bir asteroit oluşturur ve rastgele hız/dönüş atar
+
 void Asteroids_Spawn(Asteroid asteroids[MAX_ASTEROIDS], Vector2 pos, AsteroidSize size) {
     int idx = FindFreeSlot(asteroids);
-    if (idx < 0) return; /* Slot kalmadıysa iptal et */
-
+    if (idx < 0) return;
     Asteroid *a = &asteroids[idx];
     a->position = pos;
     a->size     = size;
@@ -65,7 +64,7 @@ void Asteroids_Spawn(Asteroid asteroids[MAX_ASTEROIDS], Vector2 pos, AsteroidSiz
     float angle = RandFloat(0.0f, 360.0f);
     float speed = RandFloat(1.0f, 2.5f);
 
-    /* Küçük olanlar daha hızlı uçar */
+
     if (size == AST_MEDIUM) speed *= 1.3f;
     if (size == AST_SMALL)  speed *= 1.7f;
 
@@ -76,7 +75,7 @@ void Asteroids_Spawn(Asteroid asteroids[MAX_ASTEROIDS], Vector2 pos, AsteroidSiz
     a->rotation      = RandFloat(0.0f, 360.0f);
     a->rotationSpeed = RandFloat(-2.0f, 2.0f);
 
-    // Taş görünümü vermek için köşeleri rastgele girintili yap
+
     a->vertexCount = 10 + (rand() % 3);
     if (a->vertexCount > 12) a->vertexCount = 12;
 
@@ -87,7 +86,7 @@ void Asteroids_Spawn(Asteroid asteroids[MAX_ASTEROIDS], Vector2 pos, AsteroidSiz
     a->active = true;
 }
 
-// Yeni dalgada oyuncunun uzağında belirli sayıda büyük asteroit üretir
+
 void Asteroids_SpawnWave(Asteroid asteroids[MAX_ASTEROIDS], int count, Vector2 avoidPos, float avoidRadius) {
     int placed = 0;
     int tries  = 0;
@@ -97,7 +96,7 @@ void Asteroids_SpawnWave(Asteroid asteroids[MAX_ASTEROIDS], int count, Vector2 a
             RandFloat(0.0f, (float)GetScreenWidth()),
             RandFloat(0.0f, (float)GetScreenHeight())
         };
-        /* Eğer oyuncunun dibindeyse atla, başka bir yer seç */
+
         if (DistanceSq(p, avoidPos) < avoidRadius * avoidRadius) continue;
 
         Asteroids_Spawn(asteroids, p, AST_LARGE);
@@ -105,7 +104,6 @@ void Asteroids_SpawnWave(Asteroid asteroids[MAX_ASTEROIDS], int count, Vector2 a
     }
 }
 
-// Her karede konumu günceller ve sınırları kontrol eder
 void Asteroids_Update(Asteroid asteroids[MAX_ASTEROIDS]) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
         if (!asteroids[i].active) continue;
@@ -116,7 +114,7 @@ void Asteroids_Update(Asteroid asteroids[MAX_ASTEROIDS]) {
     }
 }
 
-// Asteroidi çizgiler kullanarak poligonal şekilde ekrana çizer
+
 void Asteroids_Draw(const Asteroid asteroids[MAX_ASTEROIDS]) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
         if (!asteroids[i].active) continue;
@@ -143,7 +141,7 @@ void Asteroids_Draw(const Asteroid asteroids[MAX_ASTEROIDS]) {
     }
 }
 
-// Vurulan asteroidi yok eder veya 2 küçük parçaya böler
+
 void Asteroids_Break(Asteroid asteroids[MAX_ASTEROIDS], int index) {
     if (index < 0 || index >= MAX_ASTEROIDS) return;
     if (!asteroids[index].active) return;
@@ -152,13 +150,12 @@ void Asteroids_Break(Asteroid asteroids[MAX_ASTEROIDS], int index) {
     AsteroidSize sz  = asteroids[index].size;
     asteroids[index].active = false;
 
-    // Parçalama boyutunu belirle
+
     AsteroidSize newSize;
     if      (sz == AST_LARGE)  newSize = AST_MEDIUM;
     else if (sz == AST_MEDIUM) newSize = AST_SMALL;
-    else                       return; /* Küçükler doğrudan yok olur */
+    else                       return;
 
-    // İki yeni alt parça spawn et
     for (int k = 0; k < 2; k++) {
         Vector2 off = {
             RandFloat(-6.0f, 6.0f),
@@ -169,7 +166,7 @@ void Asteroids_Break(Asteroid asteroids[MAX_ASTEROIDS], int index) {
     }
 }
 
-// Ekranda kaç tane aktif asteroit kaldığını sayar (Dalga bitiş kontrolü için)
+
 int Asteroids_CountActive(const Asteroid asteroids[MAX_ASTEROIDS]) {
     int n = 0;
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
